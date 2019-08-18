@@ -1,4 +1,3 @@
-// Componente Nueva Publicación
 import "./Muro.css"
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -67,10 +66,16 @@ class NuevaPublicacion extends Component
 };
 
 // Convierte el estado almacenado en el redux store a props del
-// componente.
-const mapStateToProps = estado => {
+// componente NuevaPublicacion (mírese llamada a connect abajo:
+// esa llamada hace que cada vez que el estado del redux store
+// es actualizado, la función mapStateToProps es llamada).
+const mapStateToProps = nuevoEstado => {
 	//const { datos, autenticacion } = estado
-}
+};
 
-// Conectar store de redux con NuevaPublicacion
+// Conectar redux con react:
+// (1) Recibir el nuevo estado que está en el store de redux y 
+//     almacenarlos en el props del componente NuevaPublicacion.
+// (2) Importar los creadores de acciones que serán usadas en el 
+//     componente NuevaPublicacion y almacenarlos en su props.
 export default connect(null, { accionPublicar })(NuevaPublicacion);

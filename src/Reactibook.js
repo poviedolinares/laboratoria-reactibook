@@ -12,7 +12,7 @@ class Reactibook extends Component
 			<div>
 				<Route exact path = "/" component = {Muro} /> 
 			</div>
-			);
+		);
 	};
 }
 

@@ -1,4 +1,4 @@
-// Por ahora, usar el ambiente de desarrollo. 
+// TODO: Por ahora, usar el ambiente de desarrollo. 
 // Para lanzar a producción, se requerirá definir el entorno
 // y la configuración de producción.
 
