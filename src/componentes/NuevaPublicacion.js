@@ -1,7 +1,8 @@
 // Componente Nueva Publicación
 import "./Muro.css"
 import React, { Component } from "react";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
+import { accionPublicar } from "../acciones/creadoresAcciones";
 
 class NuevaPublicacion extends Component 
 {
@@ -12,24 +13,21 @@ class NuevaPublicacion extends Component
 
 	manejarCambioTexto = evento =>
 	{
-		this.setState({textoPublicacion: evento.target.value});
+		this.setState({ textoPublicacion: evento.target.value });
 	};
 
 	manejarCambioPrivacidad = evento =>
 	{
-		this.setState({privacidad: evento.target.value});
+		this.setState({ privacidad: evento.target.value });
 	};
 
 	manejarPublicar = evento =>
 	{
 		const { textoPublicacion, privacidad } = this.state;
-		console.log(this.state);
+		const { accionPublicar } = this.props;
+		accionPublicar(textoPublicacion, privacidad, "usuarioUno");
+		this.setState({ textoPublicacion: "" });
 	};
-
-/*	function manerjarCambioTexto(evento) 
-	{
-		this.setState({textoPublicacion: evento.target.value});
-	}*/
 
 	render()
 	{
@@ -68,5 +66,11 @@ class NuevaPublicacion extends Component
 
 };
 
-// conectar store de redux con NuevaPublicacion
-export default connect(null)(NuevaPublicacion);
+// Convierte el estado almacenado en el redux store a props del
+// componente.
+const mapStateToProps = estado => {
+	//const { datos, autenticacion } = estado
+}
+
+// Conectar store de redux con NuevaPublicacion
+export default connect(null, { accionPublicar })(NuevaPublicacion);
