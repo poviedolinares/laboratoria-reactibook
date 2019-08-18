@@ -64,7 +64,7 @@ class Muro extends Component
 // esa llamada hace que cada vez que el estado del redux store
 // es actualizado, la función mapStateToProps es llamada).
 const mapStateToProps = nuevoEstado => {
-	const objNuevaPropiedadSesion = nuevoEstado.reductorSesion; 
+	const objNuevaPropiedadSesion = nuevoEstado.nuevoEstadoSesion; 
 	return { sesion: objNuevaPropiedadSesion };
 };
 

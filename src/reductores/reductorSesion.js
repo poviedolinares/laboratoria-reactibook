@@ -1,7 +1,7 @@
 import { OBJ_ACCION_CARGA_USUARIO } from "../acciones/tiposAcciones";
 
 // Exportar para ser combinado en todosLosReductores.js.
-export default (estadoActual = {}, objAccion) =>
+export const nuevoEstadoSesion = (estadoActual = {}, objAccion) =>
 {
 	switch (objAccion.type)
 	{

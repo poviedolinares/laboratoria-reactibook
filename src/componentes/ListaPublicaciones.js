@@ -83,8 +83,8 @@ class ListaPublicaciones extends Component
 // esa llamada hace que cada vez que el estado del redux store
 // es actualizado, la función mapStateToProps es llamada).
 const mapStateToProps = nuevoEstado => {
-	const objNuevoPropiedadMuro = nuevoEstado.reductorMuro;
-	const objNuevoPropiedadSesion = nuevoEstado.reductorSesion;
+	const objNuevoPropiedadMuro = nuevoEstado.nuevoEstadoMuro;
+	const objNuevoPropiedadSesion = nuevoEstado.nuevoEstadoSesion;
 	return { muro: objNuevoPropiedadMuro, sesion: objNuevoPropiedadSesion };
 };
 

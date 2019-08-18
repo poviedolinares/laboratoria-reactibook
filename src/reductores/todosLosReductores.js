@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 
-import reductorMuro from "./reductorMuro";
-import reductorSesion from "./reductorSesion";
+import { nuevoEstadoMuro } from "./reductorMuro";
+import { nuevoEstadoSesion } from "./reductorSesion";
 
-export default combineReducers({ reductorMuro, reductorSesion });
+export default combineReducers({ nuevoEstadoMuro, nuevoEstadoSesion });

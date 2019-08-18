@@ -1,7 +1,7 @@
 import { OBJ_ACCION_CARGA_PUBLICACIONES } from "../acciones/tiposAcciones";
 
 // Exportar para ser combinado en todosLosReductores.js.
-export default (estadoActual = {}, objAccion) =>
+export const nuevoEstadoMuro = (estadoActual = {}, objAccion) =>
 {
 	switch (objAccion.type)
 	{
