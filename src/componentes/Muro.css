@@ -1,4 +1,37 @@
-.texto-publicacion {
-	width: 400px;
+.texto-publicacion
+{
+	width: 100%;
 	height: 40px;
+}
+
+.muro
+{
+	width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.botones
+{
+	text-align: right;
+}
+
+.lista-privacidad
+{
+	margin-right: 10px;
+}
+
+.publicacion
+{
+	border: 1px solid lightgray;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.link
+{
+	cursor: pointer;
+    text-decoration: underline;
+    margin-right: 10px;
+    color: blue;
 }

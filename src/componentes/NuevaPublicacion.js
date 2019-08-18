@@ -32,7 +32,7 @@ class NuevaPublicacion extends Component
 	{
 		const { textoPublicacion, privacidad } = this.state;
 		return (
-			<div>
+			<div className="muro">
 				<div>
 					<textarea
 						className="texto-publicacion"
@@ -42,9 +42,10 @@ class NuevaPublicacion extends Component
 						type = "textarea"
 					/>
 				</div>
-				<div> 
+				<div className="botones"> 
 					<span> 
 						<select 
+							className="lista-privacidad"
 							id = "lista-privacidad"
 							value = {privacidad}
 							onChange = {this.manejarCambioPrivacidad}

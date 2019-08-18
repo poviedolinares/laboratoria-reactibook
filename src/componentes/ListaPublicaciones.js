@@ -1,3 +1,4 @@
+import "./Muro.css"
 import React, { Component } from "react";
 import {connect} from "react-redux";
 import Publicacion from "./Publicacion";
@@ -9,12 +10,36 @@ import _ from "lodash";
 // en el redux store.
 class ListaPublicaciones extends Component 
 {
-	render()
+	state = {
+		seleccionDePrivacidad: "publico"
+	};
+
+	manejarSeleccionPublicos = evento =>
+	{
+		const { mostrarPublicaciones } = this.state;
+		this.setState({ seleccionDePrivacidad: "publico" });
+		this.mostrarPublicaciones();
+	};
+
+	manejarSeleccionAmigos = evento =>
+	{
+		const { mostrarPublicaciones } = this.state;
+		this.setState({ seleccionDePrivacidad: "amigos" });
+		this.mostrarPublicaciones();
+	};
+
+	mostrarPublicaciones = () =>
 	{
 		const { muro } = this.props;
+		const { seleccionDePrivacidad } = this.state;
 		const componentesTodasLasPublicaciones = _.map(muro, (publicacionesDeAutor, idAutor) =>
 			{
-				const componentesPublicacionesDeAutor = _.map(publicacionesDeAutor, (publicacion, idPublicacion) =>
+				const publicacionesFiltradas = _.filter(publicacionesDeAutor, (publicacion, idPublicacion) =>
+					{
+						return _.isEqual(seleccionDePrivacidad, publicacion.privacidad);
+					});
+
+				const componentesPublicacionesDeAutor = _.map(publicacionesFiltradas, (publicacion, idPublicacion) =>
 					{
 						return <Publicacion
 							key={idPublicacion}
@@ -29,12 +54,27 @@ class ListaPublicaciones extends Component
 		 	});
 
 		if (_.isEmpty(componentesTodasLasPublicaciones)) {
-			return (<div>No hay publicaciones para mostrar</div>);
+			return (<div className="muro">No hay publicaciones para mostrar</div>);
 		}
 
 		return (
-			<div>
+			<div className="muro">
 				{componentesTodasLasPublicaciones}
+			</div>
+		);
+	};
+
+	render()
+	{
+		const { manejarSeleccionPublicos, manejarSeleccionAmigos, mostrarPublicaciones } = this.state;
+
+		return (
+			<div>
+				<div className="muro">
+					<span className="link" onClick={this.manejarSeleccionPublicos}>publicos</span>
+					<span className="link" onClick={this.manejarSeleccionAmigos}>amigos</span>
+				</div>
+				{ this.mostrarPublicaciones() }
 			</div>
 		);
 	}

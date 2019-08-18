@@ -1,3 +1,4 @@
+import "./Muro.css"
 import React, { Component } from "react";
 import {connect} from "react-redux";
 
@@ -10,7 +11,7 @@ class Publicacion extends Component
 	render()
 	{
 		const { idAutor, idPublicacion, privacidad, texto } = this.props;
-		return (<div id={idPublicacion}>{texto}</div>);
+		return (<div className="publicacion" id={idPublicacion}>{texto}</div>);
 	}
 }
 
