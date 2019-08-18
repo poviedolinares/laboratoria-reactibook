@@ -4,8 +4,6 @@ import {connect} from "react-redux";
 import Publicacion from "./Publicacion";
 import _ from "lodash";
 
-// import { accionCargaPublicaciones } from "../acciones/creadoresAcciones";
-
 // Componente que muestra las publicaciones almacenadas (nuevo estado)
 // en el redux store.
 class ListaPublicaciones extends Component 
@@ -16,7 +14,6 @@ class ListaPublicaciones extends Component
 
 	manejarSeleccionPublicos = evento =>
 	{
-		const { mostrarPublicaciones } = this.state;
 		this.setState({ seleccionDePrivacidad: "publico" });
 		this.mostrarPublicaciones();
 	};
@@ -30,8 +27,10 @@ class ListaPublicaciones extends Component
 
 	mostrarPublicaciones = () =>
 	{
-		const { muro } = this.props;
+		const { muro, sesion } = this.props;
 		const { seleccionDePrivacidad } = this.state;
+		const idUsuario = sesion.uid;
+
 		const componentesTodasLasPublicaciones = _.map(muro, (publicacionesDeAutor, idAutor) =>
 			{
 				const publicacionesFiltradas = _.filter(publicacionesDeAutor, (publicacion, idPublicacion) =>
@@ -43,6 +42,7 @@ class ListaPublicaciones extends Component
 					{
 						return <Publicacion
 							key={idPublicacion}
+							idUsuario={idUsuario}
 							idAutor={idAutor}
 							idPublicacion={idPublicacion}
 							privacidad={publicacion.privacidad}
@@ -66,8 +66,6 @@ class ListaPublicaciones extends Component
 
 	render()
 	{
-		const { manejarSeleccionPublicos, manejarSeleccionAmigos, mostrarPublicaciones } = this.state;
-
 		return (
 			<div>
 				<div className="muro">
@@ -85,8 +83,9 @@ class ListaPublicaciones extends Component
 // esa llamada hace que cada vez que el estado del redux store
 // es actualizado, la función mapStateToProps es llamada).
 const mapStateToProps = nuevoEstado => {
-	const muro = nuevoEstado.reductorMuro;
-	return { muro };
+	const objNuevoPropiedadMuro = nuevoEstado.reductorMuro;
+	const objNuevoPropiedadSesion = nuevoEstado.reductorSesion;
+	return { muro: objNuevoPropiedadMuro, sesion: objNuevoPropiedadSesion };
 };
 
 // Conectar redux con react:

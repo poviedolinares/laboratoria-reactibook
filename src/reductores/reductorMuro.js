@@ -6,7 +6,8 @@ export default (estadoActual = {}, objAccion) =>
 	switch (objAccion.type)
 	{
 		case OBJ_ACCION_CARGA_PUBLICACIONES:
-			return objAccion.publicaciones;
+			const objNuevoEstadoMuro = objAccion.publicaciones;
+			return objNuevoEstadoMuro;
 		default:
 			return estadoActual;
 	}

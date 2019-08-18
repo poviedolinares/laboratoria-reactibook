@@ -5,4 +5,5 @@ firebase.initializeApp(FirebaseConfig);
 
 const punteroBD = firebase.database().ref();
 export const punteroPublicacionesBD = punteroBD.child("publicaciones");
-export const punteroAutenticacionBD = firebase.auth();
+
+export const punteroAutenticacionFirebase = firebase.auth();
