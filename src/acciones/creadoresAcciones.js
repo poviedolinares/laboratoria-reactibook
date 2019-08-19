@@ -38,6 +38,46 @@ export const accionCargaPublicaciones = () => async dispatch =>
 			});
 };
 
+// Creador de acción (action creator) para eliminar publicación.
+export const accionEliminarPublicacion = (idUsuario, idPublicacion) => async dispatch =>
+{
+	punteroPublicacionesBD
+		.child(idUsuario)
+		.child(idPublicacion)
+		.remove()
+		.then (result => {
+			// 'Exito'. No necesitamos hacer nada pues accionCargaPublicaciones
+			// se encargará de crear la acción que recupera el árbol de
+			// publicaciones almacenado en la base datos y actualiza el 
+			// estado del muro.
+		})
+		.catch (error => {
+			// TODO: objeto accionManejoError
+			console.log(error);
+		});	
+};
+
+// Creador de acción (action creator) para editar publicación.
+export const accionEditarPublicacion = (idPublicacion, texto, privacidad, idUsuario) => async dispatch =>
+{
+	console.log({idPublicacion, texto, privacidad, idUsuario});
+	punteroPublicacionesBD
+		.child(idUsuario)
+		.child(idPublicacion)
+		.set({texto: texto, privacidad: privacidad})
+		.then (result => {
+			console.log("exito");
+			// 'Exito'. No necesitamos hacer nada pues accionCargaPublicaciones
+			// se encargará de crear la acción que recupera el árbol de
+			// publicaciones almacenado en la base datos y actualiza el 
+			// estado del muro.
+		})
+		.catch (error => {
+			// TODO: objeto accionManejoError
+			console.log(error);
+		});	
+};
+
 // --------- SECCION DE ACTION CREATORS PARA USUARIOS --------------
 
 // Creador de acción (action creator) para iniciar sesión.

@@ -1,7 +1,17 @@
 .texto-publicacion
 {
-	width: 100%;
+	width: 400px;
 	height: 40px;
+}
+
+.seleccionada 
+{
+	border: 1px solid lightgray;
+}
+
+.opcion-privacidad
+{
+	padding: 2px;
 }
 
 .muro
@@ -23,6 +33,7 @@
 
 .publicacion
 {
+	width: 400px;
 	border: 1px solid lightgray;
     padding: 10px;
     margin-top: 10px;
@@ -34,4 +45,41 @@
     text-decoration: underline;
     margin-right: 10px;
     color: blue;
+}
+
+.invisible
+{
+	display: none;
+}
+
+.visible
+{
+	display: inline-block;
+}
+
+.telon
+{
+  	position: fixed;
+  	top: 0;
+  	bottom: 0;
+  	left: 0;
+  	right: 0;
+  	background-color: #aaaa;
+  	padding: 100px;
+}
+
+.modal
+{
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid black;
+    width: 300px;
+    min-height: 300;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.piedepagina
+{
+	margin-top: 10px;
 }

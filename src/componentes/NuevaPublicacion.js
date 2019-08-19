@@ -5,7 +5,8 @@ import { accionPublicar } from "../acciones/creadoresAcciones";
 
 class NuevaPublicacion extends Component 
 {
-	state = {
+	state =
+	{
 		textoPublicacion: "",
 		privacidad: "publico"
 	};
@@ -23,8 +24,10 @@ class NuevaPublicacion extends Component
 	manejarPublicar = evento =>
 	{
 		const { textoPublicacion, privacidad } = this.state;
-		const { accionPublicar } = this.props;
-		accionPublicar(textoPublicacion, privacidad, "usuarioUno");
+		const { sesion, accionPublicar } = this.props;
+		const idUsuario = sesion.uid;
+
+		accionPublicar(textoPublicacion, privacidad, idUsuario);
 		this.setState({ textoPublicacion: "" });
 	};
 
@@ -71,7 +74,8 @@ class NuevaPublicacion extends Component
 // esa llamada hace que cada vez que el estado del redux store
 // es actualizado, la función mapStateToProps es llamada).
 const mapStateToProps = nuevoEstado => {
-	//const { datos, autenticacion } = estado
+	const objNuevoPropiedadSesion = nuevoEstado.nuevoEstadoSesion;
+	return { sesion: objNuevoPropiedadSesion };
 };
 
 // Conectar redux con react:
@@ -79,4 +83,4 @@ const mapStateToProps = nuevoEstado => {
 //     almacenarlos en el props del componente NuevaPublicacion.
 // (2) Importar los creadores de acciones que serán usadas en el 
 //     componente NuevaPublicacion y almacenarlos en su props.
-export default connect(null, { accionPublicar })(NuevaPublicacion);
+export default connect(mapStateToProps, { accionPublicar })(NuevaPublicacion);

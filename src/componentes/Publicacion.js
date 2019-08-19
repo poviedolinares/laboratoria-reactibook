@@ -1,17 +1,124 @@
 import "./Muro.css"
 import React, { Component } from "react";
 import {connect} from "react-redux";
+import _ from "lodash";
+import { accionEditarPublicacion, accionEliminarPublicacion } from "../acciones/creadoresAcciones";
 
-// import { accionCargaPublicaciones } from "../acciones/creadoresAcciones";
 
 // Componente que muestra las publicaciones almacenadas (nuevo estado)
 // en el redux store.
 class Publicacion extends Component 
 {
+	state = 
+	{
+		textoPublicacion : this.props.texto,
+		clasePublicacion : "",
+		claseEdicion : "invisible",
+		mostrarModal : false
+	};
+
+	manejarCambioTexto = evento =>
+	{
+		this.setState({ textoPublicacion: evento.target.value });
+	};
+
+	manejarEditarPublicacion = evento =>
+	{
+		this.setState({ clasePublicacion : "invisible", claseEdicion : "visible" });
+	};
+
+	manejarEliminarPublicacion = evento =>
+	{
+		const { mostrarModal } = this.state;
+		this.setState({ mostrarModal : true });
+	};
+
+	manejarGuardar = evento =>
+	{
+		const { idPublicacion, idUsuario, privacidad, accionEditarPublicacion } = this.props;
+		const { textoPublicacion } = this.state;
+		accionEditarPublicacion(idPublicacion, textoPublicacion, privacidad, idUsuario);
+		this.setState({ clasePublicacion : "visible", claseEdicion : "invisible" });
+	};
+
+	manejarSi = () =>
+	{
+		this.setState({ mostrarModal : false });
+		const { idPublicacion, idUsuario, accionEliminarPublicacion } = this.props;
+		accionEliminarPublicacion(idUsuario, idPublicacion);
+
+	};
+
+	manejarNo = () =>
+	{
+		this.setState({ mostrarModal : false });
+	};
+
 	render()
 	{
-		const { idAutor, idPublicacion, privacidad, texto } = this.props;
-		return (<div className="publicacion" id={idPublicacion}>{texto}</div>);
+		// Propiedades psadas por el componente padre (ListaPublicaciones).
+		const { idUsuario, idAutor, idPublicacion, privacidad, texto } = this.props;
+
+		// Estado interno del componente.
+		const { mostrarModal, clasePublicacion, claseEdicion, textoPublicacion } = this.state;
+
+		// Determinar y el usuario es el autor de la publicación que será
+		// mostrada por este componente.		
+		const usuarioEsAutor = _.isEqual(idUsuario, idAutor);
+
+		return (
+			<div>
+				<div className={"publicacion " + clasePublicacion}>
+					<div id={idPublicacion}>{texto}</div>
+					{ 
+						usuarioEsAutor &&
+						(
+							<div>
+								<span className="link" onClick={this.manejarEditarPublicacion}>editar</span>
+								<span className="link" onClick={this.manejarEliminarPublicacion}>eliminar</span>
+							</div>
+						)
+					}
+				</div>
+
+
+				{ 
+					// Mostrar la caja de edición de la publicación.
+					usuarioEsAutor &&
+					(
+						<div className={"publicacion " + claseEdicion}>
+							<textarea
+								className="texto-publicacion"
+								value = {textoPublicacion}
+								onChange = {this.manejarCambioTexto}
+								type = "textarea"
+							/>
+							<div>
+								<span className="link" onClick={this.manejarGuardar}>guardar</span>
+							</div>
+						</div>
+					)
+				}
+
+
+				{
+					// Mostrar el modal de confirmación de eliminación.
+					mostrarModal &&
+					(
+						<div className="telon">
+        					<div className="modal">
+          						¿Remover la publicación?
+
+          						<div className="piedepagina">
+            						<button onClick={this.manejarSi}>Si</button>
+            						<button onClick={this.manejarNo}>No</button>
+          						</div>
+					        </div>
+					    </div>
+					)
+				}
+			</div>
+		);
 	}
 }
 
@@ -27,4 +134,4 @@ const mapStateToProps = nuevoEstado => {
 //     almacenarlos en el props del componente Publicacion.
 // (2) Importar los creadores de acciones que serán usadas en el 
 //     componente Publicacion y almacenarlos en su props.
-export default connect(null, { /* acciones */ })(Publicacion);
+export default connect(null, { accionEditarPublicacion, accionEliminarPublicacion })(Publicacion);

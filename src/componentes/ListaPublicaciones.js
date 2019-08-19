@@ -8,54 +8,78 @@ import _ from "lodash";
 // en el redux store.
 class ListaPublicaciones extends Component 
 {
-	state = {
-		seleccionDePrivacidad: "publico"
+	state = 
+	{
+		seleccionDePrivacidad: "publico",
+		opcionPublicos: "seleccionada",
+		opcionAmigos: ""
+	};
+
+	renderizarPublicacionesFiltradas = (publicacionesDeAutor, idAutor) => 
+	{
+		const { muro, sesion } = this.props;
+		const idUsuario = sesion.uid;
+		const { seleccionDePrivacidad } = this.state;
+
+		let publicacionesFiltradas = [];
+
+		Object.keys(publicacionesDeAutor).forEach(function(idPublicacion)
+		{
+			const publicacion = publicacionesDeAutor[idPublicacion];
+
+			if (_.isEqual(publicacion.privacidad, seleccionDePrivacidad))
+			{
+				publicacionesFiltradas.push
+				(
+					<Publicacion
+						key={idPublicacion}
+						idUsuario={idUsuario}
+						idAutor={idAutor}
+						idPublicacion={idPublicacion}
+						privacidad={publicacion.privacidad}
+						texto={publicacion.texto} />
+				);
+			}
+		});
+
+	  	return publicacionesFiltradas;
 	};
 
 	manejarSeleccionPublicos = evento =>
 	{
-		this.setState({ seleccionDePrivacidad: "publico" });
+		this.setState
+		(
+			{
+				seleccionDePrivacidad: "publico",
+				opcionPublicos: "seleccionada",
+				opcionAmigos: ""
+			}
+		);
 		this.mostrarPublicaciones();
 	};
 
 	manejarSeleccionAmigos = evento =>
 	{
-		const { mostrarPublicaciones } = this.state;
-		this.setState({ seleccionDePrivacidad: "amigos" });
+		this.setState
+		(
+			{
+				seleccionDePrivacidad: "amigos",
+				opcionPublicos: "",
+				opcionAmigos: "seleccionada"
+			}
+		);
 		this.mostrarPublicaciones();
 	};
 
 	mostrarPublicaciones = () =>
 	{
 		const { muro, sesion } = this.props;
-		const { seleccionDePrivacidad } = this.state;
 		const idUsuario = sesion.uid;
 
 		const componentesTodasLasPublicaciones = _.map(muro, (publicacionesDeAutor, idAutor) =>
-			{
-				const publicacionesFiltradas = _.filter(publicacionesDeAutor, (publicacion, idPublicacion) =>
-					{
-						return _.isEqual(seleccionDePrivacidad, publicacion.privacidad);
-					});
-
-				const componentesPublicacionesDeAutor = _.map(publicacionesFiltradas, (publicacion, idPublicacion) =>
-					{
-						return <Publicacion
-							key={idPublicacion}
-							idUsuario={idUsuario}
-							idAutor={idAutor}
-							idPublicacion={idPublicacion}
-							privacidad={publicacion.privacidad}
-							texto={publicacion.texto} />
-
-					});
-
-				return componentesPublicacionesDeAutor;
-		 	});
-
-		if (_.isEmpty(componentesTodasLasPublicaciones)) {
-			return (<div className="muro">No hay publicaciones para mostrar</div>);
-		}
+		{
+			return this.renderizarPublicacionesFiltradas(publicacionesDeAutor, idAutor);
+		});
 
 		return (
 			<div className="muro">
@@ -69,8 +93,12 @@ class ListaPublicaciones extends Component
 		return (
 			<div>
 				<div className="muro">
-					<span className="link" onClick={this.manejarSeleccionPublicos}>publicos</span>
-					<span className="link" onClick={this.manejarSeleccionAmigos}>amigos</span>
+					<span
+						className={"link opcion-privacidad " + this.state.opcionPublicos}
+						onClick={this.manejarSeleccionPublicos}>publicos</span>
+					<span 
+						className={"link opcion-privacidad " + this.state.opcionAmigos} 
+						onClick={this.manejarSeleccionAmigos}>amigos</span>
 				</div>
 				{ this.mostrarPublicaciones() }
 			</div>
