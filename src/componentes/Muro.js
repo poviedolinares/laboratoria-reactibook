@@ -53,7 +53,12 @@ class Muro extends Component
 			<div>
 				<NuevaPublicacion />
 				<ListaPublicaciones />
-				<span className="link" onClick={this.manejarTerminarSesion}>Cerrar sesión</span>
+				<div className="muro piedepagina">
+					<span
+						className="link"
+						onClick={this.manejarTerminarSesion}>Cerrar sesión
+					</span>
+				</div>
 			</div>
 		);
 	}

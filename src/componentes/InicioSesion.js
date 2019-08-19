@@ -53,23 +53,33 @@ class InicioSesion extends Component
 	{
 		const {textoEmail, textoPassword} = this.state;
 		return(
-			<div >
-			 	<div>Email:</div>
-			 	<div><input id="email" 
-			 				type="email" 
-			 				value={textoEmail} 
-			 				onChange = {this.manejarCambioEmail} /> </div>
-				
-				<div>Password:</div>
-			 	<div><input id="Password" 
-			 				type="Password" 
-			 				value={textoPassword} 
-			 				onChange = {this.manejarCambioPassword} /> 
-			 	</div>
-			 	<button onClick ={this.manejarInicioSesion}> Iniciar Sesión </button>
-			 	<button onClick ={this.manejarCrearUsuario}> Crear Usuario </button>
-
-
+			<div className="iniciar">
+				<div className="muro">
+				 	<div>Email:</div>
+				 	<div><input id="email" 
+				 				type="email" 
+				 				value={textoEmail} 
+				 				onChange = {this.manejarCambioEmail} /> </div>
+					
+					<div>Password:</div>
+				 	<div><input id="Password" 
+				 				type="Password" 
+				 				value={textoPassword} 
+				 				onChange = {this.manejarCambioPassword} /> 
+				 	</div>
+				 	<div className="pieddepagina">
+					 	<button 
+					 		className = "botones-iniciar"
+					 		onClick = {this.manejarInicioSesion}>
+					 		Iniciar Sesión
+					 	</button>
+					 	<button 
+					 		className = "botones-iniciar"
+					 		onClick = {this.manejarCrearUsuario}>
+					 		Crear Usuario
+					 	</button>
+					</div>
+				</div> 	
 			</div> 	
 		);
 	}
