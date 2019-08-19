@@ -2,14 +2,16 @@ import "./Muro.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { accionIniciarSesion, accionCrearUsuario } from "../acciones/creadoresAcciones";
-
+import _ from "lodash";
 
 class InicioSesion extends Component
 {
 	state = 
 	{
 		textoEmail: "",
-		textoPassword: ""	
+		textoPassword: "",
+		mensajeErrorEmail: "",
+		mensajeErrorPassword: ""
 	};
 	
 	// Se ejecuta automáticamente cada vez que el 
@@ -25,20 +27,50 @@ class InicioSesion extends Component
 		}
 	}
 
+	emailValido = () =>
+	{
+		const {textoEmail} = this.state;
+		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    	return re.test(String(textoEmail).toLowerCase());
+	}
+
 	manejarCambioEmail = evento =>
 	{
-		this.setState ({textoEmail: evento.target.value});
+		this.setState(
+			{
+				textoEmail: evento.target.value,
+				mensajeErrorEmail: "",
+				mensajeErrorPassword: ""
+			});
 	};
 
 	manejarCambioPassword = evento =>
 	{
-		this.setState ({textoPassword: evento.target.value});
+		this.setState(
+			{
+				textoPassword: evento.target.value,
+				mensajeErrorEmail: "",
+				mensajeErrorPassword: ""
+			});
 	};
 
 	manejarInicioSesion = evento =>
 	{
-		const {textoEmail,textoPassword} = this.state;
+		const {textoEmail, textoPassword} = this.state;
 		const {accionIniciarSesion} = this.props;
+
+		if (!this.emailValido())
+		{
+			this.setState({mensajeErrorEmail: "email no valido"});
+			return;
+		}
+
+		if (_.isEmpty(textoPassword))
+		{
+			this.setState({mensajeErrorPassword: "debe ingresar password"});
+			return;
+		}
+
 		accionIniciarSesion(textoEmail, textoPassword);
 	};
 	
@@ -51,22 +83,28 @@ class InicioSesion extends Component
 
 	render()
 	{
-		const {textoEmail, textoPassword} = this.state;
+		const {textoEmail, textoPassword, mensajeErrorEmail, mensajeErrorPassword} = this.state;
+		const hayErrorEmail = !_.isEmpty(mensajeErrorEmail);
+		const hayErrorPassword = !_.isEmpty(mensajeErrorPassword);
 		return(
 			<div className="iniciar">
 				<div className="muro">
 				 	<div>Email:</div>
-				 	<div><input id="email" 
+				 	<div className="campo-entrada-session"><input id="email" 
 				 				type="email" 
 				 				value={textoEmail} 
-				 				onChange = {this.manejarCambioEmail} /> </div>
+				 				onChange = {this.manejarCambioEmail} /> 
+				 	</div>
+				 	{ hayErrorEmail && (<div className="error-entrada-session">{mensajeErrorEmail}</div>) }
 					
-					<div>Password:</div>
-				 	<div><input id="Password" 
+					<div className="etiqueta-entrada-session">Password:</div>
+				 	<div className="campo-entrada-session"><input id="Password" 
 				 				type="Password" 
 				 				value={textoPassword} 
 				 				onChange = {this.manejarCambioPassword} /> 
 				 	</div>
+				 	{ hayErrorPassword && (<div className="error-entrada-session">{mensajeErrorPassword}</div>) }
+
 				 	<div className="pieddepagina">
 					 	<button 
 					 		className = "botones-iniciar"
@@ -75,6 +113,7 @@ class InicioSesion extends Component
 					 	</button>
 					 	<button 
 					 		className = "botones-iniciar"
+					 		style = {{display: "none"}}
 					 		onClick = {this.manejarCrearUsuario}>
 					 		Crear Usuario
 					 	</button>
@@ -100,6 +139,3 @@ const mapStateToProps = nuevoEstado => {
 // (2) Importar los creadores de acciones que serán usadas en el 
 //     componente IniciarSesion y almacenarlos en su props.
 export default connect(mapStateToProps, { accionIniciarSesion, accionCrearUsuario })(InicioSesion);
-
-
-

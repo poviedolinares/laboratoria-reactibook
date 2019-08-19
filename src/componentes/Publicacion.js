@@ -12,7 +12,6 @@ class Publicacion extends Component
 	state = 
 	{
 		textoPublicacion : this.props.texto,
-		clasePublicacion : "",
 		mostrarPublicacion : true,
 		mostrarEdicion : false,
 		mostrarModal : false
@@ -38,8 +37,12 @@ class Publicacion extends Component
 	{
 		const { idPublicacion, idUsuario, privacidad, accionEditarPublicacion } = this.props;
 		const { textoPublicacion } = this.state;
-		accionEditarPublicacion(idPublicacion, textoPublicacion, privacidad, idUsuario);
-		this.setState({ mostrarPublicacion : true, mostrarEdicion : false });
+
+		if (!_.isEmpty(textoPublicacion))
+		{
+			accionEditarPublicacion(idPublicacion, textoPublicacion, privacidad, idUsuario);
+			this.setState({ mostrarPublicacion : true, mostrarEdicion : false });
+		}
 	};
 
 	manejarSi = () =>

@@ -1,7 +1,30 @@
 import { punteroPublicacionesBD, punteroAutenticacionFirebase } from "../config/firebase";
-import { OBJ_ACCION_CARGA_PUBLICACIONES, OBJ_ACCION_CARGA_USUARIO } from "./tiposAcciones";
+import * as tiposAcciones from "./tiposAcciones";
 
-// --------- SECCION DE ACTION CREATORS PARA PUBLICACIONES --------------
+// ------- SECCION DE ACTION CREATORS PARA MANEJO DE ERRORES -----------
+
+// Úsese con códigos de error de HTTP, por convensión.
+export const accionAdicionarError = (codigoError, mensajeError) => dispatch =>
+{
+    dispatch(
+    	{ 
+    		type: tiposAcciones.OBJ_ACCION_ADICIONAR_ERROR,
+    		error: { codigo: codigoError, mensaje: mensajeError }
+    	}
+    );
+};
+
+export const accionRemoverError = (indice) => dispatch =>
+{
+    dispatch(
+    	{ 
+    		type: tiposAcciones.OBJ_ACCION_REMOVER_ERROR,
+    		indice: indice
+    	}
+    );
+};
+
+// --------- SECCION DE ACTION CREATORS PARA PUBLICACIONES -------------
 
 // Creador de acción (action creator) para nueva publicación.
 export const accionPublicar = (texto, privacidad, idUsuario) => async dispatch =>
@@ -31,7 +54,7 @@ export const accionCargaPublicaciones = () => async dispatch =>
 				const arbolDePublicaciones = objRptaCargaPublicaciones.val();
 				const objAccionCargaPublicaciones =
 					{
-						type: OBJ_ACCION_CARGA_PUBLICACIONES,
+						type: tiposAcciones.OBJ_ACCION_CARGA_PUBLICACIONES,
 						publicaciones: arbolDePublicaciones						
 					}
 				dispatch(objAccionCargaPublicaciones);
@@ -139,7 +162,7 @@ export const accionCargaUsuario = () => dispatch =>
 			{
 				dispatch(
 				{
-					type: OBJ_ACCION_CARGA_USUARIO,
+					type: tiposAcciones.OBJ_ACCION_CARGA_USUARIO,
 					usuario: objRptaObtieneUsuario   /* la respuesta de firebase
 													    es el usuario en sí */
 				});
@@ -148,7 +171,7 @@ export const accionCargaUsuario = () => dispatch =>
 			{
 				dispatch(
 				{
-					type: OBJ_ACCION_CARGA_USUARIO,
+					type: tiposAcciones.OBJ_ACCION_CARGA_USUARIO,
 					usuario: null
 				});
 			}

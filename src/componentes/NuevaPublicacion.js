@@ -2,13 +2,14 @@ import "./Muro.css"
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { accionPublicar } from "../acciones/creadoresAcciones";
+import _ from "lodash";
 
 class NuevaPublicacion extends Component 
 {
 	state =
 	{
 		textoPublicacion: "",
-		privacidad: "publico"
+		privacidad: "publico",
 	};
 
 	manejarCambioTexto = evento =>
@@ -34,6 +35,7 @@ class NuevaPublicacion extends Component
 	render()
 	{
 		const { textoPublicacion, privacidad } = this.state;
+		const textoVacio = _.isEmpty(textoPublicacion);
 		return (
 			<div className="muro">
 				<div>
@@ -58,9 +60,18 @@ class NuevaPublicacion extends Component
 							</select>
 					</span>
 					<span> 
-						<button type="submit" id="boton-publicar" onClick={this.manejarPublicar}>
-							Publicar
-						</button>
+						{ 
+							textoVacio ?
+							(
+								<button type="submit" id="boton-publicar" onClick={this.manejarPublicar} disabled>
+									Publicar
+								</button>
+							) : (
+								<button type="submit" id="boton-publicar" onClick={this.manejarPublicar}>
+									Publicar
+								</button>
+							)
+						}
 					</span>
 				</div>
 			</div>
@@ -74,8 +85,8 @@ class NuevaPublicacion extends Component
 // esa llamada hace que cada vez que el estado del redux store
 // es actualizado, la función mapStateToProps es llamada).
 const mapStateToProps = nuevoEstado => {
-	const objNuevoPropiedadSesion = nuevoEstado.nuevoEstadoSesion;
-	return { sesion: objNuevoPropiedadSesion };
+	const objNuevaPropiedadSesion = nuevoEstado.nuevoEstadoSesion;
+	return { sesion: objNuevaPropiedadSesion };
 };
 
 // Conectar redux con react:

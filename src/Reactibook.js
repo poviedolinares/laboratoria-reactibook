@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import Muro from "./componentes/Muro";
@@ -27,5 +26,8 @@ class Reactibook extends Component
 	};
 }
 
-// conectar store de redux con Reactibook
+// Conectar redux con react:
+// (1) No recibimos actualizaciones del redux store (por ende null).
+// (2) Importar los creadores de acciones que serán usadas en el 
+//     componente Reactibook y almacenarlos en su props.
 export default connect(null, { accionCargaUsuario })(Reactibook);
