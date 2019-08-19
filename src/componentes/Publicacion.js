@@ -13,7 +13,8 @@ class Publicacion extends Component
 	{
 		textoPublicacion : this.props.texto,
 		clasePublicacion : "",
-		claseEdicion : "invisible",
+		mostrarPublicacion : true,
+		mostrarEdicion : false,
 		mostrarModal : false
 	};
 
@@ -24,7 +25,7 @@ class Publicacion extends Component
 
 	manejarEditarPublicacion = evento =>
 	{
-		this.setState({ clasePublicacion : "invisible", claseEdicion : "visible" });
+		this.setState({ mostrarPublicacion : false, mostrarEdicion : true });
 	};
 
 	manejarEliminarPublicacion = evento =>
@@ -38,7 +39,7 @@ class Publicacion extends Component
 		const { idPublicacion, idUsuario, privacidad, accionEditarPublicacion } = this.props;
 		const { textoPublicacion } = this.state;
 		accionEditarPublicacion(idPublicacion, textoPublicacion, privacidad, idUsuario);
-		this.setState({ clasePublicacion : "visible", claseEdicion : "invisible" });
+		this.setState({ mostrarPublicacion : true, mostrarEdicion : false });
 	};
 
 	manejarSi = () =>
@@ -60,7 +61,7 @@ class Publicacion extends Component
 		const { idUsuario, idAutor, idPublicacion, privacidad, texto } = this.props;
 
 		// Estado interno del componente.
-		const { mostrarModal, clasePublicacion, claseEdicion, textoPublicacion } = this.state;
+		const { mostrarModal, mostrarPublicacion, mostrarEdicion, textoPublicacion } = this.state;
 
 		// Determinar y el usuario es el autor de la publicación que será
 		// mostrada por este componente.		
@@ -68,25 +69,37 @@ class Publicacion extends Component
 
 		return (
 			<div>
-				<div className={"publicacion " + clasePublicacion}>
-					<div id={idPublicacion}>{texto}</div>
-					{ 
-						usuarioEsAutor &&
-						(
-							<div>
-								<span className="link" onClick={this.manejarEditarPublicacion}>editar</span>
-								<span className="link" onClick={this.manejarEliminarPublicacion}>eliminar</span>
-							</div>
-						)
-					}
-				</div>
+				{
+					// Mostrar caja de publicacion (es decir, no está en modo de edición)
+					mostrarPublicacion &&
+					(
+						<div className="publicacion">
+							<div id={idPublicacion}>{texto}</div>
+							{ 
+								usuarioEsAutor &&
+								(
+									<div>
+										<span
+											className="link"
+											onClick={this.manejarEditarPublicacion}>editar
+										</span>
+										<span 
+											className="link"
+											onClick={this.manejarEliminarPublicacion}>eliminar
+										</span>
+									</div>
+								)
+							}
+						</div>
+					)
+				}
 
 
 				{ 
 					// Mostrar la caja de edición de la publicación.
-					usuarioEsAutor &&
+					usuarioEsAutor && mostrarEdicion &&
 					(
-						<div className={"publicacion " + claseEdicion}>
+						<div className="publicacion">
 							<textarea
 								className="texto-publicacion"
 								value = {textoPublicacion}
