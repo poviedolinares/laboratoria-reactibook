@@ -1,28 +1,5 @@
-import { punteroPublicacionesBD, punteroAutenticacionFirebase } from "../config/firebase";
+import { punteroPublicacionesBD, punteroAmigosBD, punteroAutenticacionFirebase } from "../config/firebase";
 import * as tiposAcciones from "./tiposAcciones";
-
-// ------- SECCION DE ACTION CREATORS PARA MANEJO DE ERRORES -----------
-
-// Úsese con códigos de error de HTTP, por convensión.
-export const accionAdicionarError = (codigoError, mensajeError) => dispatch =>
-{
-    dispatch(
-    	{ 
-    		type: tiposAcciones.OBJ_ACCION_ADICIONAR_ERROR,
-    		error: { codigo: codigoError, mensaje: mensajeError }
-    	}
-    );
-};
-
-export const accionRemoverError = (indice) => dispatch =>
-{
-    dispatch(
-    	{ 
-    		type: tiposAcciones.OBJ_ACCION_REMOVER_ERROR,
-    		indice: indice
-    	}
-    );
-};
 
 // --------- SECCION DE ACTION CREATORS PARA PUBLICACIONES -------------
 
@@ -176,4 +153,47 @@ export const accionCargaUsuario = () => dispatch =>
 				});
 			}
 		});
+};
+
+
+// Creador de acción (action creator) para cargar los amigos.
+export const accionCargaAmigos = idUsuario => async dispatch =>
+{
+	punteroAmigosBD
+		.child(idUsuario)
+		.on("value", objRptaCargaAmigos =>
+			{
+				const arbolDeAmigos = objRptaCargaAmigos.val();
+			console.log(arbolDeAmigos);
+				
+				const objAccionCargaAmigos =
+					{
+						type: tiposAcciones.OBJ_ACCION_CARGA_AMIGOS,
+						amigos: arbolDeAmigos						
+					}
+				dispatch(objAccionCargaAmigos);
+			});
+};
+
+// ------- SECCION DE ACTION CREATORS PARA MANEJO DE ERRORES -----------
+
+// Úsese con códigos de error de HTTP, por convensión.
+export const accionAdicionarError = (codigoError, mensajeError) => dispatch =>
+{
+    dispatch(
+    	{ 
+    		type: tiposAcciones.OBJ_ACCION_ADICIONAR_ERROR,
+    		error: { codigo: codigoError, mensaje: mensajeError }
+    	}
+    );
+};
+
+export const accionRemoverError = (indice) => dispatch =>
+{
+    dispatch(
+    	{ 
+    		type: tiposAcciones.OBJ_ACCION_REMOVER_ERROR,
+    		indice: indice
+    	}
+    );
 };

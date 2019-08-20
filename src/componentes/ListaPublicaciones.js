@@ -17,7 +17,7 @@ class ListaPublicaciones extends Component
 
 	renderizarPublicacionesFiltradas = (publicacionesDeAutor, idAutor) => 
 	{
-		const { muro, sesion } = this.props;
+		const { muro, sesion, amigos } = this.props;
 		const idUsuario = sesion.uid;
 		const { seleccionDePrivacidad } = this.state;
 
@@ -27,7 +27,8 @@ class ListaPublicaciones extends Component
 		{
 			const publicacion = publicacionesDeAutor[idPublicacion];
 
-			if (_.isEqual(publicacion.privacidad, seleccionDePrivacidad))
+			if (_.isEqual(publicacion.privacidad, seleccionDePrivacidad) ||
+				_.isEqual(idUsuario, idAutor))
 			{
 				publicacionesFiltradas.push
 				(
@@ -113,7 +114,8 @@ class ListaPublicaciones extends Component
 const mapStateToProps = nuevoEstado => {
 	const objNuevoPropiedadMuro = nuevoEstado.nuevoEstadoMuro;
 	const objNuevoPropiedadSesion = nuevoEstado.nuevoEstadoSesion;
-	return { muro: objNuevoPropiedadMuro, sesion: objNuevoPropiedadSesion };
+	const objNuevaPropiedadAmigos = nuevoEstado.nuevoEstadoAmigos; 
+	return { muro: objNuevoPropiedadMuro, sesion: objNuevoPropiedadSesion, amigos: objNuevaPropiedadAmigos };
 };
 
 // Conectar redux con react:

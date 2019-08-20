@@ -18,10 +18,12 @@ class InicioSesion extends Component
 	// componente (incluyendo los props) es actualizado.
 	componentDidUpdate(propsAnteriores, estadoAnterior)
 	{
+		const { sesion, accionCargaAmigos } = this.props;
+
 		// Si la sesión no es null (es decir, el usuario
-		// ha iniciado sesion exitósamente), redireccionar 
-		// al componente Muro.
-		if (this.props.sesion) 
+		// ha iniciado sesion exitósamente), 
+		// redireccionar al componente Muro.
+		if (sesion && sesion.uid) 
 		{
 			this.props.history.push("/muro");
 		}
@@ -129,7 +131,7 @@ class InicioSesion extends Component
 // esa llamada hace que cada vez que el estado del redux store
 // es actualizado, la función mapStateToProps es llamada).
 const mapStateToProps = nuevoEstado => {
-	const objNuevaPropiedadSesion = nuevoEstado.nuevoEstadoSesion; 
+	const objNuevaPropiedadSesion = nuevoEstado.nuevoEstadoSesion;
 	return { sesion: objNuevaPropiedadSesion };
 };
 
