@@ -29,11 +29,9 @@ class ListaPublicaciones extends Component
 			const publicacion = listaPublicacionesDeAutor[idPublicacion];
 
 			// Comparar si la privacidad de la publicación es igual a la privacidad seleccionada
-			// por el usuario ó si el autor de la publicación es el usuario (es decir,
-			// siempre muestra las publicaciones propias independientemente de la privacidad
-			// seleccionada por el usuario)
-			if (_.isEqual(publicacion.privacidad, seleccionDePrivacidad) ||
-				_.isEqual(idUsuario, idAutor))
+			// por el usuario.
+			if (_.isEqual(publicacion.privacidad, seleccionDePrivacidad) /*||
+				_.isEqual(idUsuario, idAutor)*/)
 			{
 				publicacionesFiltradas.push
 				(

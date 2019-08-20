@@ -34,12 +34,12 @@ class Publicacion extends Component
 
 	manejarGuardar = evento =>
 	{
-		const { idPublicacion, idUsuario, emailUsuario, privacidad, accionEditarPublicacion } = this.props;
+		const { idPublicacion, idUsuario, emailAutor, privacidad, accionEditarPublicacion } = this.props;
 		const { textoPublicacion } = this.state;
 
 		if (!_.isEmpty(textoPublicacion))
 		{
-			accionEditarPublicacion(idPublicacion, textoPublicacion, privacidad, idUsuario, emailUsuario);
+			accionEditarPublicacion(idPublicacion, textoPublicacion, privacidad, idUsuario, emailAutor);
 			this.setState({ mostrarPublicacion : true, mostrarEdicion : false });
 		}
 	};
