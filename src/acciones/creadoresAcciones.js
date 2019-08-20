@@ -10,7 +10,7 @@ export const accionPublicar = (texto, privacidad, idUsuario) => async dispatch =
 		.child(idUsuario)
 		.push()
 		.set({texto: texto, privacidad: privacidad})
-		.then (result => {
+		.then (resultado => {
 			// 'Exito'. No necesitamos hacer nada pues accionCargaPublicaciones
 			// se encargará de crear la acción que recupera el árbol de
 			// publicaciones almacenado en la base datos y actualiza el 
@@ -45,7 +45,7 @@ export const accionEliminarPublicacion = (idUsuario, idPublicacion) => async dis
 		.child(idUsuario)
 		.child(idPublicacion)
 		.remove()
-		.then (result => {
+		.then (resultado => {
 			// 'Exito'. No necesitamos hacer nada pues accionCargaPublicaciones
 			// se encargará de crear la acción que recupera el árbol de
 			// publicaciones almacenado en la base datos y actualiza el 
@@ -65,7 +65,7 @@ export const accionEditarPublicacion = (idPublicacion, texto, privacidad, idUsua
 		.child(idUsuario)
 		.child(idPublicacion)
 		.set({texto: texto, privacidad: privacidad})
-		.then (result => {
+		.then (resultado => {
 			console.log("exito");
 			// 'Exito'. No necesitamos hacer nada pues accionCargaPublicaciones
 			// se encargará de crear la acción que recupera el árbol de
@@ -85,14 +85,17 @@ export const accionIniciarSesion = (email, password) => dispatch =>
 {
 	punteroAutenticacionFirebase
 		.signInWithEmailAndPassword(email, password)
-		.then (result => {
+		.then (resultado => {
 			// Éxito. No necesitamos hacer nada pues accionCargaUsuario
 			// se encarga de crear la acción que recupera el usuario
 			// autenticado y actualiza el estado de la sesion.
 		})
 		.catch (error => {
-			// TODO: objeto accionManejoError
-			console.log(error);
+			dispatch(
+			{
+				type: tiposAcciones.OBJ_ACCION_ERROR,
+				codigoError: error.code
+			});
 		});
 };
 
@@ -102,7 +105,7 @@ export const accionCrearUsuario = (email, password) => dispatch =>
 {
 	punteroAutenticacionFirebase
 		.createUserWithEmailAndPassword(email, password)
-		.then (result => {
+		.then (resultado => {
 			// Éxito. No necesitamos hacer nada pues accionCargaUsuario
 			// se encarga de crear la acción que recupera el usuario
 			// autenticado y actualiza el estado de la sesion.
@@ -118,7 +121,7 @@ export const accionTerminarSesion = () => dispatch =>
 {
 	punteroAutenticacionFirebase
 		.signOut()
-		.then (result => {
+		.then (resultado => {
 			// Éxito. No necesitamos hacer nada pues accionCargaUsuario
 			// se encarga de crear la acción que recupera el usuario
 			// autenticado y actualiza el estado de la sesion.
@@ -165,7 +168,7 @@ export const accionCargaAmigos = idUsuario => async dispatch =>
 			{
 				const arbolDeAmigos = objRptaCargaAmigos.val();
 			console.log(arbolDeAmigos);
-				
+
 				const objAccionCargaAmigos =
 					{
 						type: tiposAcciones.OBJ_ACCION_CARGA_AMIGOS,
@@ -173,27 +176,4 @@ export const accionCargaAmigos = idUsuario => async dispatch =>
 					}
 				dispatch(objAccionCargaAmigos);
 			});
-};
-
-// ------- SECCION DE ACTION CREATORS PARA MANEJO DE ERRORES -----------
-
-// Úsese con códigos de error de HTTP, por convensión.
-export const accionAdicionarError = (codigoError, mensajeError) => dispatch =>
-{
-    dispatch(
-    	{ 
-    		type: tiposAcciones.OBJ_ACCION_ADICIONAR_ERROR,
-    		error: { codigo: codigoError, mensaje: mensajeError }
-    	}
-    );
-};
-
-export const accionRemoverError = (indice) => dispatch =>
-{
-    dispatch(
-    	{ 
-    		type: tiposAcciones.OBJ_ACCION_REMOVER_ERROR,
-    		indice: indice
-    	}
-    );
 };

@@ -4,6 +4,13 @@ import { connect } from "react-redux";
 import { accionIniciarSesion, accionCrearUsuario } from "../acciones/creadoresAcciones";
 import _ from "lodash";
 
+// TODO: definir en archivo separado.
+const mapaErrores = 
+{
+	"auth/user-not-found" : "Usuario inválido", 
+	"auth/wrong-password" : "Password inválido"
+};
+
 class InicioSesion extends Component
 {
 	state = 
@@ -11,14 +18,15 @@ class InicioSesion extends Component
 		textoEmail: "",
 		textoPassword: "",
 		mensajeErrorEmail: "",
-		mensajeErrorPassword: ""
+		mensajeErrorPassword: "",
+		codigoErrorActual: ""
 	};
 	
 	// Se ejecuta automáticamente cada vez que el 
 	// componente (incluyendo los props) es actualizado.
 	componentDidUpdate(propsAnteriores, estadoAnterior)
 	{
-		const { sesion, accionCargaAmigos } = this.props;
+		const { sesion, accionCargaAmigos, codigoError } = this.props;
 
 		// Si la sesión no es null (es decir, el usuario
 		// ha iniciado sesion exitósamente), 
@@ -34,7 +42,7 @@ class InicioSesion extends Component
 		const {textoEmail} = this.state;
 		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     	return re.test(String(textoEmail).toLowerCase());
-	}
+	};
 
 	manejarCambioEmail = evento =>
 	{
@@ -85,9 +93,10 @@ class InicioSesion extends Component
 
 	render()
 	{
-		const {textoEmail, textoPassword, mensajeErrorEmail, mensajeErrorPassword} = this.state;
+		const { textoEmail, textoPassword, mensajeErrorEmail, mensajeErrorPassword, codigoErrorActual } = this.state;
 		const hayErrorEmail = !_.isEmpty(mensajeErrorEmail);
 		const hayErrorPassword = !_.isEmpty(mensajeErrorPassword);
+		const { codigoError } = this.props;
 		return(
 			<div className="iniciar">
 				<div className="muro">
@@ -107,7 +116,7 @@ class InicioSesion extends Component
 				 	</div>
 				 	{ hayErrorPassword && (<div className="error-entrada-session">{mensajeErrorPassword}</div>) }
 
-				 	<div className="pieddepagina">
+				 	<div className="piedepagina">
 					 	<button 
 					 		className = "botones-iniciar"
 					 		onClick = {this.manejarInicioSesion}>
@@ -120,6 +129,9 @@ class InicioSesion extends Component
 					 		Crear Usuario
 					 	</button>
 					</div>
+					{ !_.isEmpty(codigoError) && 
+						(<div className="error-entrada-session">{mapaErrores[codigoError]}</div>) 
+					}
 				</div> 	
 			</div> 	
 		);
@@ -132,7 +144,8 @@ class InicioSesion extends Component
 // es actualizado, la función mapStateToProps es llamada).
 const mapStateToProps = nuevoEstado => {
 	const objNuevaPropiedadSesion = nuevoEstado.nuevoEstadoSesion;
-	return { sesion: objNuevaPropiedadSesion };
+	const objNuevaPropiedadError = nuevoEstado.nuevoEstadoError;
+	return { sesion: objNuevaPropiedadSesion, codigoError: objNuevaPropiedadError };
 };
 
 // Conectar redux con react:
