@@ -24,43 +24,49 @@ class NuevaPublicacion extends Component
 
 	manejarPublicar = evento =>
 	{
-		const { textoPublicacion, privacidad } = this.state;
-		const { sesion, accionPublicar } = this.props;
-		const idUsuario = sesion.uid;
-
-		accionPublicar(textoPublicacion, privacidad, idUsuario);
+		const idUsuario = this.props.sesion.uid;
+		const emailUsuario = this.props.sesion.email;
+		this.props.accionPublicar(
+			this.state.textoPublicacion,
+			this.state.privacidad,
+			idUsuario,
+			emailUsuario);
 		this.setState({ textoPublicacion: "" });
 	};
 
 	render()
 	{
-		const { textoPublicacion, privacidad } = this.state;
-		const textoVacio = _.isEmpty(textoPublicacion);
+		const textoVacio = _.isEmpty(this.state.textoPublicacion);
 		return (
 			<div className="muro">
 				<div>
+					{ /* Creación del input de nueva publicacion */ }
 					<textarea
 						className="texto-publicacion"
-						value = {textoPublicacion}
+						value = {this.state.textoPublicacion}
 						onChange = {this.manejarCambioTexto}
 						id = "nuevaPublicacion"
 						type = "textarea"
 					/>
 				</div>
 				<div className="botones"> 
+					{ /* Creación de la lista de opciones de privacidad */ }
 					<span> 
 						<select 
 							className="lista-privacidad"
 							id = "lista-privacidad"
-							value = {privacidad}
-							onChange = {this.manejarCambioPrivacidad}
-						>
-								<option value="publico">Público</option>
-								<option value="amigos">Amigos</option>
-							</select>
+							value = {this.state.privacidad}
+							onChange = {this.manejarCambioPrivacidad}>
+							<option value="publico">Público</option>
+							<option value="amigos">Amigos</option>
+						</select>
 					</span>
+
+					{ /* Creación del botón de publicar */ }
 					<span> 
 						{ 
+							// Validación de la caja de texto (textarea) de la publicación
+							// nueva. Si es vacío, deshabilitar el botón publicar.
 							textoVacio ?
 							(
 								<button type="submit" id="boton-publicar" onClick={this.manejarPublicar} disabled>
@@ -80,18 +86,23 @@ class NuevaPublicacion extends Component
 
 };
 
-// Convierte el estado almacenado en el redux store a props del
+// Convierte el ESTADO almacenado en el REDUX store a PROPS del
 // componente NuevaPublicacion (mírese llamada a connect abajo:
-// esa llamada hace que cada vez que el estado del redux store
+// esa llamada hace que cada vez que el ESTADO del REDUX store
 // es actualizado, la función mapStateToProps es llamada).
 const mapStateToProps = nuevoEstado => {
 	const objNuevaPropiedadSesion = nuevoEstado.nuevoEstadoSesion;
 	return { sesion: objNuevaPropiedadSesion };
 };
 
-// Conectar redux con react:
-// (1) Recibir el nuevo estado que está en el store de redux y 
-//     almacenarlos en el props del componente NuevaPublicacion.
+// Esta línear tiene dos partes.
+//
+// Parte A. Conectar REDUX con REACT:
+// (1) Recibir el nuevo ESTADO que está en el store de REDUX y 
+//     almacenarlos en el PROPS del componente NuevaPublicacion.
 // (2) Importar los creadores de acciones que serán usadas en el 
-//     componente NuevaPublicacion y almacenarlos en su props.
+//     componente NuevaPublicacion y almacenarlos en su PROPS.
+// 
+// Parte B. Exportar (export default) NuevaPublicacion para poder ser
+// usado en el componente Muro.
 export default connect(mapStateToProps, { accionPublicar })(NuevaPublicacion);

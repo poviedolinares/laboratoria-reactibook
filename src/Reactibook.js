@@ -8,10 +8,17 @@ import { accionCargaUsuario } from "./acciones/creadoresAcciones";
 
 class Reactibook extends Component 
 {
-	// Se ejecuta automáticamente (una vez) 
-	// después del componente ser montado.
+	// REACT ejecuta automáticamente (una sola vez) esta llamada 
+	// después del componente Reactibook ser montado. En este orden:
+	//
+	// 1. componentWillMount
+	// 2. render
+	// 3. componentDidMount
 	componentDidMount() 
 	{
+		// Permite escuchar cambios en el ESTADO de sesión
+		// en firebase para disparar una acción en caso 
+		// dicho ESTADO haya cambiado en el futuro.
 		this.props.accionCargaUsuario();
 	}
 
@@ -26,8 +33,13 @@ class Reactibook extends Component
 	};
 }
 
-// Conectar redux con react:
-// (1) No recibimos actualizaciones del redux store (por ende null).
+// Esta línear tiene dos partes.
+//
+// Parte A. Conectar REDUX con REACT:
+// (1) No recibimos actualizaciones del REDUX store (por ende null).
 // (2) Importar los creadores de acciones que serán usadas en el 
-//     componente Reactibook y almacenarlos en su props.
+//     componente Reactibook y almacenarlos en su PROPS.
+// 
+// Parte B. Exportar (export default) Reactibook para poder ser
+// usado en index.js.
 export default connect(null, { accionCargaUsuario })(Reactibook);

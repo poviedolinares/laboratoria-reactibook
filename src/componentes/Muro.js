@@ -9,8 +9,12 @@ import { accionCargaPublicaciones, accionTerminarSesion } from "../acciones/crea
 // Nueva Publicación y Lista de Publicaciones
 class Muro extends Component 
 {
-	// Se ejecuta automáticamente (una vez) 
-	// después del componente ser montado.
+	// REACT ejecuta automáticamente (una sola vez) esta llamada 
+	// después del componente Muro ser montado. En este orden:
+	//
+	// 1. componentWillMount
+	// 2. render
+	// 3. componentDidMount
 	componentDidMount()
 	{
 		// Si la sesión es null (es decir, el usuario
@@ -22,15 +26,19 @@ class Muro extends Component
 		}
 
 		// Continuar a realizar la carga de publicaciones
-		// si el check encima determina que el usuario
-		// no ha terminado sesión.
-		const { accionCargaPublicaciones } = this.props;
-		accionCargaPublicaciones();
+		// si el if encima determina que el usuario
+		// ha ingresado a la sesión.
+		this.props.accionCargaPublicaciones();
 	}
 
-	// Se ejecuta automáticamente cada vez que el 
-	// componente (incluyendo los props) es actualizado.
-	componentDidUpdate(propsAnteriores, estadoAnterior)
+	// REACT ejecuta esta llamada automáticamente cada vez que el 
+	// el state local o los PROPS del componente Muro son actualizados. 
+	//
+	// Esta es ejecutada después de Render:
+	// 1. componentWillUpdate
+	// 2. render
+	// 3. componentDidUpdate.
+	componentDidUpdate(propsAnteriores, estadoLocalAnterior)
 	{
 		// Si la sesión es null (es decir, el usuario
 		// ha terminado sesion), redireccionar 
@@ -43,8 +51,7 @@ class Muro extends Component
 
 	manejarTerminarSesion = () =>
 	{
-		const { accionTerminarSesion } = this.props;
-		accionTerminarSesion();
+		this.props.accionTerminarSesion();
 	};
 
 	render()
@@ -64,18 +71,23 @@ class Muro extends Component
 	}
 }
 
-// Convierte el estado almacenado en el redux store a props del
+// Convierte el ESTADO almacenado en el REDUX store a PROPS del
 // componente Muro (mírese llamada a connect abajo:
-// esa llamada hace que cada vez que el estado del redux store
+// esa llamada hace que cada vez que el ESTADO del REDUX store
 // es actualizado, la función mapStateToProps es llamada).
 const mapStateToProps = nuevoEstado => {
 	const objNuevaPropiedadSesion = nuevoEstado.nuevoEstadoSesion; 
 	return { sesion: objNuevaPropiedadSesion };
 };
 
-// Conectar redux con react:
-// (1) Recibir el nuevo estado que está en el store de redux y 
-//     almacenarlos en el props del componente Muro.
+// Esta línear tiene dos partes.
+//
+// Parte A. Conectar REDUX con REACT:
+// (1) Recibir el nuevo ESTADO que está en el store de REDUX y 
+//     almacenarlos en el PROPS del componente Muro.
 // (2) Importar los creadores de acciones que serán usadas en el 
-//     componente Muro y almacenarlos en su props.
+//     componente Muro y almacenarlos en su PROPS.
+// 
+// Parte B. Exportar (export default) Muro para poder ser
+// usado en el componente Reactibook.
 export default connect(mapStateToProps, { accionCargaPublicaciones, accionTerminarSesion })(Muro);

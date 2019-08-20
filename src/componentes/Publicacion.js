@@ -29,18 +29,17 @@ class Publicacion extends Component
 
 	manejarEliminarPublicacion = evento =>
 	{
-		const { mostrarModal } = this.state;
 		this.setState({ mostrarModal : true });
 	};
 
 	manejarGuardar = evento =>
 	{
-		const { idPublicacion, idUsuario, privacidad, accionEditarPublicacion } = this.props;
+		const { idPublicacion, idUsuario, emailUsuario, privacidad, accionEditarPublicacion } = this.props;
 		const { textoPublicacion } = this.state;
 
 		if (!_.isEmpty(textoPublicacion))
 		{
-			accionEditarPublicacion(idPublicacion, textoPublicacion, privacidad, idUsuario);
+			accionEditarPublicacion(idPublicacion, textoPublicacion, privacidad, idUsuario, emailUsuario);
 			this.setState({ mostrarPublicacion : true, mostrarEdicion : false });
 		}
 	};
@@ -50,7 +49,6 @@ class Publicacion extends Component
 		this.setState({ mostrarModal : false });
 		const { idPublicacion, idUsuario, accionEliminarPublicacion } = this.props;
 		accionEliminarPublicacion(idUsuario, idPublicacion);
-
 	};
 
 	manejarNo = () =>
@@ -60,34 +58,32 @@ class Publicacion extends Component
 
 	render()
 	{
-		// Propiedades psadas por el componente padre (ListaPublicaciones).
-		const { idUsuario, idAutor, idPublicacion, privacidad, texto } = this.props;
-
-		// Estado interno del componente.
-		const { mostrarModal, mostrarPublicacion, mostrarEdicion, textoPublicacion } = this.state;
-
 		// Determinar y el usuario es el autor de la publicación que será
 		// mostrada por este componente.		
-		const usuarioEsAutor = _.isEqual(idUsuario, idAutor);
+		const usuarioEsAutor = _.isEqual(this.props.idUsuario, this.props.idAutor);
 
 		return (
 			<div>
 				{
 					// Mostrar caja de publicacion (es decir, no está en modo de edición)
-					mostrarPublicacion &&
+					this.state.mostrarPublicacion &&
 					(
 						<div className="publicacion">
-							<div id={idPublicacion}>{texto}</div>
+							<div className="email">{this.props.emailAutor}</div>
+							<div id={this.props.idPublicacion}>{this.props.texto}</div>
+							{/* Renderizar links de edición y eliminación si el usuario
+								es el autor */}
 							{ 
 								usuarioEsAutor &&
 								(
-									<div>
+
+									<div className="margen">
 										<span
-											className="link"
+											className="link pequeno"
 											onClick={this.manejarEditarPublicacion}>editar
 										</span>
 										<span 
-											className="link"
+											className="link pequeno"
 											onClick={this.manejarEliminarPublicacion}>eliminar
 										</span>
 									</div>
@@ -100,12 +96,12 @@ class Publicacion extends Component
 
 				{ 
 					// Mostrar la caja de edición de la publicación.
-					usuarioEsAutor && mostrarEdicion &&
+					usuarioEsAutor && this.state.mostrarEdicion &&
 					(
 						<div className="publicacion">
 							<textarea
 								className="texto-publicacion"
-								value = {textoPublicacion}
+								value = {this.state.textoPublicacion}
 								onChange = {this.manejarCambioTexto}
 								type = "textarea"
 							/>
@@ -119,7 +115,7 @@ class Publicacion extends Component
 
 				{
 					// Mostrar el modal de confirmación de eliminación.
-					mostrarModal &&
+					this.state.mostrarModal &&
 					(
 						<div className="telon">
         					<div className="modal">

@@ -6,7 +6,7 @@
 
 .seleccionada 
 {
-    border-radius: 4px;
+  border-radius: 4px;
 	border: 1px solid lightgray;
 }
 
@@ -77,12 +77,15 @@
     width: 300px;
     min-height: 300;
     margin: 0 auto;
+  text-align: center;
     padding: 30px;
 }
 
 .piedepagina
 {
 	margin: 10px 0 10px 0;
+  text-align: center;
+  width: 100%;
 }
 
 .iniciar
@@ -116,4 +119,21 @@
 {
     font-size: small;
     color: red;
+}
+
+.email
+{
+  font-size: small;
+  color: green;
+  text-align: right;
+}
+
+.pequeno
+{
+  font-size: 14px;
+}
+
+.margen
+{
+  margin-top: 10px;
 }
